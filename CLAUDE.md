@@ -86,3 +86,11 @@ New `.swift` files must be added to `MarkShare.xcodeproj/project.pbxproj` in 4 p
 - **No external dependencies** - Pure Swift markdown parsing
 - **JavaScript disabled** in preview WebView (enabled only in export for content measurement)
 - **Share extension** has its own simplified MarkdownRenderer to avoid framework dependencies
+
+## AI Thinking Block Handling
+The app specially handles `<thinking>` and `<think>` tags from AI-generated content:
+
+- Renders as visually muted blocks with a "Thinking" label
+- Uses placeholder extraction to avoid HTML escaping issues
+- Content inside thinking blocks is rendered as markdown
+- CSS styles in all 4 theme files (.thinking-block class)

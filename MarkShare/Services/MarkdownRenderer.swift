@@ -6,8 +6,71 @@ struct MarkdownRenderer {
 
     /// Converts markdown text to full HTML document with theme CSS
     func render(markdown: String, css: String) -> String {
-        let bodyHTML = convertToHTML(markdown)
+        let (processedMarkdown, thinkingBlocks) = extractThinkingBlocks(markdown)
+        var bodyHTML = convertToHTML(processedMarkdown)
+        bodyHTML = restoreThinkingBlocks(bodyHTML, blocks: thinkingBlocks)
         return wrapInHTMLDocument(body: bodyHTML, css: css)
+    }
+
+    // MARK: - Thinking Block Processing
+
+    /// Extracts <thinking> and <think> blocks, replacing with placeholders
+    private func extractThinkingBlocks(_ markdown: String) -> (String, [(id: String, content: String)]) {
+        let pattern = #"<think(?:ing)?>([\s\S]*?)</think(?:ing)?>"#
+
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
+            return (markdown, [])
+        }
+
+        var result = markdown
+        var blocks: [(id: String, content: String)] = []
+        let nsRange = NSRange(result.startIndex..., in: result)
+        let matches = regex.matches(in: result, options: [], range: nsRange)
+
+        // Process matches in reverse order to preserve indices
+        for (index, match) in matches.reversed().enumerated() {
+            guard let fullRange = Range(match.range, in: result),
+                  let contentRange = Range(match.range(at: 1), in: result) else {
+                continue
+            }
+
+            let thinkingContent = String(result[contentRange]).trimmingCharacters(in: .whitespacesAndNewlines)
+            let blockIndex = matches.count - 1 - index
+            let placeholderId = "XTHINKINGBLOCKX\(blockIndex)XTHINKINGBLOCKX"
+
+            blocks.insert((id: placeholderId, content: thinkingContent), at: 0)
+            result.replaceSubrange(fullRange, with: placeholderId)
+        }
+
+        return (result, blocks)
+    }
+
+    /// Restores thinking blocks from placeholders with rendered HTML
+    private func restoreThinkingBlocks(_ html: String, blocks: [(id: String, content: String)]) -> String {
+        var result = html
+
+        for block in blocks {
+            // The placeholder might be wrapped in <p> tags
+            let placeholderInParagraph = "<p>\(block.id)</p>"
+            let innerHTML = convertToHTML(block.content)
+
+            let replacement = """
+            <div class="thinking-block">
+              <div class="thinking-content">
+            \(innerHTML)
+              </div>
+            </div>
+            """
+
+            // Try replacing with <p> wrapper first, then without
+            if result.contains(placeholderInParagraph) {
+                result = result.replacingOccurrences(of: placeholderInParagraph, with: replacement)
+            } else {
+                result = result.replacingOccurrences(of: block.id, with: replacement)
+            }
+        }
+
+        return result
     }
 
     /// Converts markdown text to HTML body content

@@ -202,3 +202,25 @@ strong {
 em {
     font-style: italic;
 }
+
+/* AI Thinking Blocks */
+.thinking-block {
+    background: rgba(175, 184, 193, 0.15);
+    border-left: 3px solid rgba(175, 184, 193, 0.5);
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin: 16px 0;
+}
+
+.thinking-block::before {
+    content: "Thinking";
+    display: block;
+    color: #656d76;
+    font-style: italic;
+    font-size: 0.85em;
+    margin-bottom: 6px;
+}
+
+.thinking-block .thinking-content {
+    color: #656d76;
+}
