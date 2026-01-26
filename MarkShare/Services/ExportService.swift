@@ -63,15 +63,29 @@ final class ExportService: NSObject {
 
     /// Generates PDF from HTML using WKWebView
     private func generatePDF(html: String) async throws -> Data {
-        let webView = createWebView()
+        let webView = createWebView(enableJavaScript: true)
         self.webView = webView
+
+        // Set webview to a reasonable width for PDF rendering
+        let pdfWidth: CGFloat = 612 // US Letter width in points
+        webView.frame = CGRect(x: 0, y: 0, width: pdfWidth, height: 792)
 
         // Load HTML and wait for it to finish
         try await loadHTML(html, in: webView)
 
-        // Generate PDF
+        // Get actual content height
+        let contentHeight = try await webView.evaluateJavaScript(
+            "document.documentElement.scrollHeight"
+        ) as? CGFloat ?? 792
+
+        // Resize webview to fit all content
+        webView.frame = CGRect(x: 0, y: 0, width: pdfWidth, height: contentHeight)
+
+        // Wait for layout to settle
+        try await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
+
+        // Generate PDF - don't set rect to allow full content capture with pagination
         let configuration = WKPDFConfiguration()
-        configuration.rect = CGRect(x: 0, y: 0, width: 612, height: 792) // US Letter size
 
         let data = try await webView.pdf(configuration: configuration)
         self.webView = nil
