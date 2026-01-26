@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var isExporting = false
     @State private var exportError: String?
     @State private var showingError = false
+    @State private var showingClearConfirmation = false
 
     private let renderer = MarkdownRenderer()
     private let exportService = ExportService()
@@ -47,6 +48,10 @@ struct ContentView: View {
                 }
 
                 ToolbarItem(placement: .topBarTrailing) {
+                    clearButton
+                }
+
+                ToolbarItem(placement: .topBarTrailing) {
                     toggleButton
                 }
 
@@ -63,6 +68,15 @@ struct ContentView: View {
                     }
                 }
                 Button("Cancel", role: .cancel) {}
+            }
+            .confirmationDialog("Clear Text", isPresented: $showingClearConfirmation) {
+                Button("Clear", role: .destructive) {
+                    markdownText = ""
+                    showingPreview = false
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("Are you sure you want to clear all text?")
             }
             .sheet(isPresented: $showingShareSheet) {
                 if let url = exportedFileURL {
@@ -95,6 +109,16 @@ struct ContentView: View {
 
     private var previewView: some View {
         PreviewWebView(html: renderedHTML)
+    }
+
+    private var clearButton: some View {
+        Button {
+            showingClearConfirmation = true
+        } label: {
+            Image(systemName: "trash")
+        }
+        .disabled(markdownText.isEmpty)
+        .accessibilityLabel("Clear")
     }
 
     private var toggleButton: some View {
