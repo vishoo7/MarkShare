@@ -1,0 +1,204 @@
+/* GitHub Theme for MarkShare */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #24292f;
+    --heading-color: #1f2328;
+    --link-color: #0969da;
+    --code-bg: #f6f8fa;
+    --code-text: #cf222e;
+    --blockquote-border: #d0d7de;
+    --blockquote-text: #656d76;
+    --table-border: #d0d7de;
+    --table-header-bg: #f6f8fa;
+    --hr-color: #d8dee4;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    -webkit-text-size-adjust: 100%;
+    word-wrap: break-word;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--heading-color);
+    margin-top: 24px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+h1 { font-size: 2em; border-bottom: 1px solid var(--hr-color); padding-bottom: 0.3em; }
+h2 { font-size: 1.5em; border-bottom: 1px solid var(--hr-color); padding-bottom: 0.3em; }
+h3 { font-size: 1.25em; }
+h4 { font-size: 1em; }
+h5 { font-size: 0.875em; }
+h6 { font-size: 0.85em; color: #656d76; }
+
+/* Paragraphs */
+p {
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+
+/* Links */
+a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Lists */
+ul, ol {
+    margin-top: 0;
+    margin-bottom: 16px;
+    padding-left: 2em;
+}
+
+li {
+    margin-top: 0.25em;
+}
+
+li + li {
+    margin-top: 0.25em;
+}
+
+li > ul, li > ol {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* Task Lists */
+ul.task-list {
+    list-style: none;
+    padding-left: 1.5em;
+}
+
+.task-list-item {
+    position: relative;
+}
+
+.task-list-item input[type="checkbox"] {
+    margin: 0 0.35em 0.25em -1.4em;
+    vertical-align: middle;
+}
+
+/* Code */
+code {
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+    font-size: 85%;
+    background-color: rgba(175, 184, 193, 0.2);
+    color: var(--text-color);
+    padding: 0.2em 0.4em;
+    border-radius: 6px;
+}
+
+pre {
+    background-color: var(--code-bg);
+    padding: 16px;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 85%;
+    line-height: 1.45;
+}
+
+pre code {
+    background: transparent;
+    padding: 0;
+    font-size: 100%;
+    border-radius: 0;
+}
+
+/* Blockquotes */
+blockquote {
+    margin: 0 0 16px 0;
+    padding: 0 1em;
+    border-left: 0.25em solid var(--blockquote-border);
+    color: var(--blockquote-text);
+}
+
+blockquote > :first-child {
+    margin-top: 0;
+}
+
+blockquote > :last-child {
+    margin-bottom: 0;
+}
+
+/* Tables */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: max-content;
+    max-width: 100%;
+    margin-top: 0;
+    margin-bottom: 16px;
+    display: block;
+    overflow: auto;
+}
+
+th, td {
+    border: 1px solid var(--table-border);
+    padding: 6px 13px;
+}
+
+th {
+    background-color: var(--table-header-bg);
+    font-weight: 600;
+}
+
+tr {
+    background-color: var(--bg-color);
+    border-top: 1px solid var(--table-border);
+}
+
+tr:nth-child(2n) {
+    background-color: var(--code-bg);
+}
+
+/* Horizontal Rule */
+hr {
+    border: 0;
+    border-bottom: 1px solid var(--hr-color);
+    margin: 24px 0;
+    height: 0.25em;
+    padding: 0;
+    background-color: var(--hr-color);
+}
+
+/* Images */
+img {
+    max-width: 100%;
+    height: auto;
+    box-sizing: content-box;
+}
+
+/* Strikethrough */
+del, s {
+    color: #656d76;
+}
+
+/* Strong and Emphasis */
+strong {
+    font-weight: 600;
+}
+
+em {
+    font-style: italic;
+}
