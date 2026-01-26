@@ -12,6 +12,7 @@
 		8A1B2C3D4E5F6A7B00000003 /* MarkdownInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B00000013 /* MarkdownInputView.swift */; };
 		8A1B2C3D4E5F6A7B00000004 /* PreviewWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B00000014 /* PreviewWebView.swift */; };
 		8A1B2C3D4E5F6A7B00000005 /* ThemePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B00000015 /* ThemePicker.swift */; };
+		8A1B2C3D4E5F6A7B0000000F /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B0000002F /* WelcomeView.swift */; };
 		8A1B2C3D4E5F6A7B00000006 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B00000016 /* Theme.swift */; };
 		8A1B2C3D4E5F6A7B00000007 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B00000017 /* ThemeManager.swift */; };
 		8A1B2C3D4E5F6A7B00000008 /* MarkdownRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B00000018 /* MarkdownRenderer.swift */; };
@@ -60,6 +61,7 @@
 		8A1B2C3D4E5F6A7B00000013 /* MarkdownInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownInputView.swift; sourceTree = "<group>"; };
 		8A1B2C3D4E5F6A7B00000014 /* PreviewWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewWebView.swift; sourceTree = "<group>"; };
 		8A1B2C3D4E5F6A7B00000015 /* ThemePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePicker.swift; sourceTree = "<group>"; };
+		8A1B2C3D4E5F6A7B0000002F /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		8A1B2C3D4E5F6A7B00000016 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		8A1B2C3D4E5F6A7B00000017 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		8A1B2C3D4E5F6A7B00000018 /* MarkdownRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownRenderer.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 				8A1B2C3D4E5F6A7B00000013 /* MarkdownInputView.swift */,
 				8A1B2C3D4E5F6A7B00000014 /* PreviewWebView.swift */,
 				8A1B2C3D4E5F6A7B00000015 /* ThemePicker.swift */,
+				8A1B2C3D4E5F6A7B0000002F /* WelcomeView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -306,6 +309,7 @@
 				8A1B2C3D4E5F6A7B00000003 /* MarkdownInputView.swift in Sources */,
 				8A1B2C3D4E5F6A7B00000004 /* PreviewWebView.swift in Sources */,
 				8A1B2C3D4E5F6A7B00000005 /* ThemePicker.swift in Sources */,
+				8A1B2C3D4E5F6A7B0000000F /* WelcomeView.swift in Sources */,
 				8A1B2C3D4E5F6A7B00000006 /* Theme.swift in Sources */,
 				8A1B2C3D4E5F6A7B00000007 /* ThemeManager.swift in Sources */,
 				8A1B2C3D4E5F6A7B00000008 /* MarkdownRenderer.swift in Sources */,
