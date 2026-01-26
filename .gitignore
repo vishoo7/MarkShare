@@ -28,3 +28,6 @@ Carthage/Build/
 # Temporary files
 *.swp
 *~
+
+# App Store screenshots
+screenshots/

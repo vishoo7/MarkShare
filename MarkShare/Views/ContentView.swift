@@ -47,15 +47,9 @@ struct ContentView: View {
                     ThemePicker(selectedTheme: $themeManager.currentTheme)
                 }
 
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItemGroup(placement: .topBarTrailing) {
                     clearButton
-                }
-
-                ToolbarItem(placement: .topBarTrailing) {
                     toggleButton
-                }
-
-                ToolbarItem(placement: .topBarTrailing) {
                     shareButton
                 }
             }
