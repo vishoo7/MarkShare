@@ -80,7 +80,7 @@ final class ExportService: NSObject {
 
     /// Generates PNG image from HTML using WKWebView snapshot
     private func generateImage(html: String) async throws -> Data {
-        let webView = createWebView()
+        let webView = createWebView(enableJavaScript: true)
         self.webView = webView
 
         // Load HTML and wait for it to finish
@@ -116,9 +116,9 @@ final class ExportService: NSObject {
     }
 
     /// Creates a configured WKWebView for rendering
-    private func createWebView() -> WKWebView {
+    private func createWebView(enableJavaScript: Bool = false) -> WKWebView {
         let configuration = WKWebViewConfiguration()
-        configuration.preferences.javaScriptEnabled = false
+        configuration.preferences.javaScriptEnabled = enableJavaScript
 
         let webView = WKWebView(frame: CGRect(x: 0, y: 0, width: 800, height: 600), configuration: configuration)
         webView.isOpaque = true
