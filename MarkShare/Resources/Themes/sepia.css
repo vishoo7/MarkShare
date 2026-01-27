@@ -110,6 +110,8 @@ pre {
     overflow-x: auto;
     margin: 1em 0;
     border: 1px solid var(--hr-color);
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
 pre code {

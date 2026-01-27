@@ -104,6 +104,8 @@ pre {
     border-radius: 6px;
     overflow-x: auto;
     margin: 1em 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
 pre code {
