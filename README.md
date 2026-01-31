@@ -12,6 +12,13 @@ AI tools like Claude and ChatGPT give you responses in Markdown. If you want to 
 
 ## Features
 
+- **Conversation Mode** — Share entire AI conversations with multiple message blocks:
+  - User, Assistant, and System roles
+  - Color-coded messages per role
+  - Add, delete, and edit messages
+  - Markdown rendering within each message
+  - AI thinking block support (`<thinking>` tags render as muted blocks)
+
 - **Pure Swift Markdown Renderer** — No external dependencies. Supports CommonMark and GitHub Flavored Markdown:
   - Headers (h1-h6)
   - Bold, italic, strikethrough
@@ -62,10 +69,17 @@ MarkShare is designed with privacy as a core principle:
 
 ## Usage
 
+### Markdown Mode
 1. **Write** — Enter or paste your markdown in the editor
 2. **Preview** — Tap the eye icon to see rendered output
 3. **Theme** — Use the theme picker to change the look
 4. **Share** — Tap the share button and choose PDF, PNG, or HTML
+
+### Conversation Mode
+1. **Switch** — Tap the chat bubble icon to enter conversation mode
+2. **Add Messages** — Tap "+" to add message blocks
+3. **Set Roles** — Choose User, Assistant, or System for each message
+4. **Preview & Share** — Same as markdown mode - preview and export to PDF/PNG/HTML
 
 ## Open Source & Transparency
 
@@ -81,6 +95,8 @@ MarkShare/
 │   └── MarkShareApp.swift          # App entry point
 ├── Views/
 │   ├── ContentView.swift           # Main container view
+│   ├── ConversationView.swift      # Conversation mode container
+│   ├── ConversationEntryView.swift # Individual message block
 │   ├── MarkdownInputView.swift     # Text editor with placeholder
 │   ├── PreviewWebView.swift        # WKWebView wrapper for preview
 │   ├── ThemePicker.swift           # Theme selection UI
@@ -90,6 +106,7 @@ MarkShare/
 │   ├── ExportService.swift         # PDF/PNG/HTML export
 │   └── ThemeManager.swift          # Theme persistence
 ├── Models/
+│   ├── ConversationEntry.swift     # Conversation message model
 │   └── Theme.swift                 # Theme enum and properties
 └── Resources/
     └── Themes/                     # CSS theme files
