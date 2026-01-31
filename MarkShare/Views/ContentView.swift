@@ -14,6 +14,10 @@ struct ContentView: View {
     @State private var showingError = false
     @State private var showingClearConfirmation = false
 
+    // Conversation mode state
+    @State private var isConversationMode = false
+    @State private var conversationEntries: [ConversationEntry] = []
+
     private let renderer = MarkdownRenderer()
     private let exportService = ExportService()
 
@@ -23,8 +27,13 @@ struct ContentView: View {
                 if geometry.size.width > 700 {
                     // iPad / large screen: side-by-side layout
                     HStack(spacing: 0) {
-                        editorView
-                            .frame(width: geometry.size.width / 2)
+                        if isConversationMode {
+                            ConversationView(entries: $conversationEntries)
+                                .frame(width: geometry.size.width / 2)
+                        } else {
+                            editorView
+                                .frame(width: geometry.size.width / 2)
+                        }
 
                         Divider()
 
@@ -36,7 +45,11 @@ struct ContentView: View {
                     if showingPreview {
                         previewView
                     } else {
-                        editorView
+                        if isConversationMode {
+                            ConversationView(entries: $conversationEntries)
+                        } else {
+                            editorView
+                        }
                     }
                 }
             }
@@ -50,6 +63,7 @@ struct ContentView: View {
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     clearButton
                     toggleButton
+                    conversationModeButton
                     shareButton
                 }
             }
@@ -63,14 +77,20 @@ struct ContentView: View {
                 }
                 Button("Cancel", role: .cancel) {}
             }
-            .confirmationDialog("Clear Text", isPresented: $showingClearConfirmation) {
+            .confirmationDialog("Clear Content", isPresented: $showingClearConfirmation) {
                 Button("Clear", role: .destructive) {
-                    markdownText = ""
+                    if isConversationMode {
+                        conversationEntries = []
+                    } else {
+                        markdownText = ""
+                    }
                     showingPreview = false
                 }
                 Button("Cancel", role: .cancel) {}
             } message: {
-                Text("Are you sure you want to clear all text?")
+                Text(isConversationMode
+                     ? "Are you sure you want to clear all conversation entries?"
+                     : "Are you sure you want to clear all text?")
             }
             .sheet(isPresented: $showingShareSheet) {
                 if let url = exportedFileURL {
@@ -111,7 +131,7 @@ struct ContentView: View {
         } label: {
             Image(systemName: "trash")
         }
-        .disabled(markdownText.isEmpty)
+        .disabled(isConversationMode ? conversationEntries.isEmpty : markdownText.isEmpty)
         .accessibilityLabel("Clear")
     }
 
@@ -126,13 +146,26 @@ struct ContentView: View {
         .accessibilityLabel(showingPreview ? "Edit" : "Preview")
     }
 
+    private var conversationModeButton: some View {
+        Button {
+            withAnimation {
+                isConversationMode.toggle()
+            }
+        } label: {
+            Image(systemName: isConversationMode
+                  ? "doc.text"
+                  : "bubble.left.and.bubble.right")
+        }
+        .accessibilityLabel(isConversationMode ? "Markdown Mode" : "Conversation Mode")
+    }
+
     private var shareButton: some View {
         Button {
             showingExportOptions = true
         } label: {
             Image(systemName: "square.and.arrow.up")
         }
-        .disabled(markdownText.isEmpty)
+        .disabled(isConversationMode ? conversationEntries.isEmpty : markdownText.isEmpty)
         .accessibilityLabel("Share")
     }
 
@@ -140,7 +173,11 @@ struct ContentView: View {
 
     private var renderedHTML: String {
         let css = themeManager.loadCurrentThemeCSS()
-        return renderer.render(markdown: markdownText, css: css)
+        if isConversationMode {
+            return renderer.renderConversation(entries: conversationEntries, css: css)
+        } else {
+            return renderer.render(markdown: markdownText, css: css)
+        }
     }
 
     // MARK: - Export

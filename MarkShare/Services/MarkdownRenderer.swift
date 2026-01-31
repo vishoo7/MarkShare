@@ -12,6 +12,31 @@ struct MarkdownRenderer {
         return wrapInHTMLDocument(body: bodyHTML, css: css)
     }
 
+    /// Converts conversation entries to full HTML document with theme CSS
+    func renderConversation(entries: [ConversationEntry], css: String) -> String {
+        var bodyHTML = "<div class=\"conversation\">\n"
+
+        for entry in entries {
+            let roleClass = entry.role.rawValue.lowercased()
+            let (processedContent, thinkingBlocks) = extractThinkingBlocks(entry.content)
+            var contentHTML = convertToHTML(processedContent)
+            contentHTML = restoreThinkingBlocks(contentHTML, blocks: thinkingBlocks)
+
+            bodyHTML += """
+              <div class="conversation-entry \(roleClass)">
+                <div class="role-label">\(entry.role.rawValue)</div>
+                <div class="message-content">
+            \(contentHTML)
+                </div>
+              </div>
+
+            """
+        }
+
+        bodyHTML += "</div>"
+        return wrapInHTMLDocument(body: bodyHTML, css: css)
+    }
+
     // MARK: - Thinking Block Processing
 
     /// Extracts <thinking> and <think> blocks, replacing with placeholders

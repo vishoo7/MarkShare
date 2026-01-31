@@ -226,3 +226,64 @@ em {
 .thinking-block .thinking-content {
     color: #656d76;
 }
+
+/* Conversation Mode Styles */
+.conversation {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.conversation-entry {
+    padding: 12px 16px;
+    border-radius: 6px;
+    border: 1px solid #d0d7de;
+}
+
+.conversation-entry.user {
+    background: #ddf4ff;
+    border-color: #54aeff;
+}
+
+.conversation-entry.assistant {
+    background: #dafbe1;
+    border-color: #4ac26b;
+}
+
+.conversation-entry.system {
+    background: #f6f8fa;
+    border-color: #d0d7de;
+    font-style: italic;
+}
+
+.role-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+}
+
+.conversation-entry.user .role-label {
+    color: #0969da;
+}
+
+.conversation-entry.assistant .role-label {
+    color: #1a7f37;
+}
+
+.conversation-entry.system .role-label {
+    color: #656d76;
+}
+
+.message-content {
+    /* Reset first/last margins inside message */
+}
+
+.message-content > *:first-child {
+    margin-top: 0;
+}
+
+.message-content > *:last-child {
+    margin-bottom: 0;
+}

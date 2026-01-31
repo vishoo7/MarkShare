@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		8A1B2C3D4E5F6A7B00000001 /* MarkShareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B00000011 /* MarkShareApp.swift */; };
 		8A1B2C3D4E5F6A7B00000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B00000012 /* ContentView.swift */; };
+		CV1B2C3D4E5F6A7B00000001 /* ConversationEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = CV1B2C3D4E5F6A7B00000011 /* ConversationEntry.swift */; };
+		CV1B2C3D4E5F6A7B00000002 /* ConversationEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CV1B2C3D4E5F6A7B00000012 /* ConversationEntryView.swift */; };
+		CV1B2C3D4E5F6A7B00000003 /* ConversationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CV1B2C3D4E5F6A7B00000013 /* ConversationView.swift */; };
 		8A1B2C3D4E5F6A7B00000003 /* MarkdownInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B00000013 /* MarkdownInputView.swift */; };
 		8A1B2C3D4E5F6A7B00000004 /* PreviewWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B00000014 /* PreviewWebView.swift */; };
 		8A1B2C3D4E5F6A7B00000005 /* ThemePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B00000015 /* ThemePicker.swift */; };
@@ -66,6 +69,9 @@
 /* Begin PBXFileReference section */
 		8A1B2C3D4E5F6A7B00000011 /* MarkShareApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkShareApp.swift; sourceTree = "<group>"; };
 		8A1B2C3D4E5F6A7B00000012 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		CV1B2C3D4E5F6A7B00000011 /* ConversationEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationEntry.swift; sourceTree = "<group>"; };
+		CV1B2C3D4E5F6A7B00000012 /* ConversationEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationEntryView.swift; sourceTree = "<group>"; };
+		CV1B2C3D4E5F6A7B00000013 /* ConversationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationView.swift; sourceTree = "<group>"; };
 		8A1B2C3D4E5F6A7B00000013 /* MarkdownInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownInputView.swift; sourceTree = "<group>"; };
 		8A1B2C3D4E5F6A7B00000014 /* PreviewWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewWebView.swift; sourceTree = "<group>"; };
 		8A1B2C3D4E5F6A7B00000015 /* ThemePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePicker.swift; sourceTree = "<group>"; };
@@ -150,6 +156,8 @@
 			isa = PBXGroup;
 			children = (
 				8A1B2C3D4E5F6A7B00000012 /* ContentView.swift */,
+				CV1B2C3D4E5F6A7B00000012 /* ConversationEntryView.swift */,
+				CV1B2C3D4E5F6A7B00000013 /* ConversationView.swift */,
 				8A1B2C3D4E5F6A7B00000013 /* MarkdownInputView.swift */,
 				8A1B2C3D4E5F6A7B00000014 /* PreviewWebView.swift */,
 				8A1B2C3D4E5F6A7B00000015 /* ThemePicker.swift */,
@@ -171,6 +179,7 @@
 		8A1B2C3D4E5F6A7B00000065 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				CV1B2C3D4E5F6A7B00000011 /* ConversationEntry.swift */,
 				8A1B2C3D4E5F6A7B00000016 /* Theme.swift */,
 			);
 			path = Models;
@@ -363,6 +372,9 @@
 			files = (
 				8A1B2C3D4E5F6A7B00000001 /* MarkShareApp.swift in Sources */,
 				8A1B2C3D4E5F6A7B00000002 /* ContentView.swift in Sources */,
+				CV1B2C3D4E5F6A7B00000001 /* ConversationEntry.swift in Sources */,
+				CV1B2C3D4E5F6A7B00000002 /* ConversationEntryView.swift in Sources */,
+				CV1B2C3D4E5F6A7B00000003 /* ConversationView.swift in Sources */,
 				8A1B2C3D4E5F6A7B00000003 /* MarkdownInputView.swift in Sources */,
 				8A1B2C3D4E5F6A7B00000004 /* PreviewWebView.swift in Sources */,
 				8A1B2C3D4E5F6A7B00000005 /* ThemePicker.swift in Sources */,
@@ -547,7 +559,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.markshare.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -578,7 +590,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.markshare.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -602,7 +614,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.markshare.app.share;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -627,7 +639,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.markshare.app.share;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -646,7 +658,7 @@
 				DEVELOPMENT_TEAM = 9YKB34T46U;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.markshare.app.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -665,7 +677,7 @@
 				DEVELOPMENT_TEAM = 9YKB34T46U;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.markshare.app.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
