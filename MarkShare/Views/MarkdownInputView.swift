@@ -1,9 +1,8 @@
 import SwiftUI
 
-/// Text editor for markdown input with placeholder support
+/// Text editor for markdown input with placeholder support and HTML paste conversion
 struct MarkdownInputView: View {
     @Binding var text: String
-    @FocusState private var isFocused: Bool
 
     private let placeholder = "Enter your markdown here...\n\n# Heading 1\n## Heading 2\n\n**Bold** and *italic* text\n\n- List item 1\n- List item 2\n\n```\ncode block\n```"
 
@@ -19,11 +18,8 @@ struct MarkdownInputView: View {
                     .allowsHitTesting(false)
             }
 
-            // Text Editor
-            TextEditor(text: $text)
-                .font(.system(.body, design: .monospaced))
-                .scrollContentBackground(.hidden)
-                .focused($isFocused)
+            // Paste-aware Text Editor that converts HTML to Markdown
+            PasteAwareTextEditor(text: $text)
                 .dynamicTypeSize(...DynamicTypeSize.accessibility3)
         }
         .background(Color(.systemBackground))

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		PA1B2C3D4E5F6A7B00000001 /* PasteAwareTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = PA1B2C3D4E5F6A7B00000011 /* PasteAwareTextEditor.swift */; };
 		8A1B2C3D4E5F6A7B00000001 /* MarkShareApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B00000011 /* MarkShareApp.swift */; };
 		8A1B2C3D4E5F6A7B00000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B00000012 /* ContentView.swift */; };
 		CV1B2C3D4E5F6A7B00000001 /* ConversationEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = CV1B2C3D4E5F6A7B00000011 /* ConversationEntry.swift */; };
@@ -67,6 +68,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		PA1B2C3D4E5F6A7B00000011 /* PasteAwareTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteAwareTextEditor.swift; sourceTree = "<group>"; };
 		8A1B2C3D4E5F6A7B00000011 /* MarkShareApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkShareApp.swift; sourceTree = "<group>"; };
 		8A1B2C3D4E5F6A7B00000012 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		CV1B2C3D4E5F6A7B00000011 /* ConversationEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationEntry.swift; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				CV1B2C3D4E5F6A7B00000012 /* ConversationEntryView.swift */,
 				CV1B2C3D4E5F6A7B00000013 /* ConversationView.swift */,
 				8A1B2C3D4E5F6A7B00000013 /* MarkdownInputView.swift */,
+				PA1B2C3D4E5F6A7B00000011 /* PasteAwareTextEditor.swift */,
 				8A1B2C3D4E5F6A7B00000014 /* PreviewWebView.swift */,
 				8A1B2C3D4E5F6A7B00000015 /* ThemePicker.swift */,
 				8A1B2C3D4E5F6A7B0000002F /* WelcomeView.swift */,
@@ -376,6 +379,7 @@
 				CV1B2C3D4E5F6A7B00000002 /* ConversationEntryView.swift in Sources */,
 				CV1B2C3D4E5F6A7B00000003 /* ConversationView.swift in Sources */,
 				8A1B2C3D4E5F6A7B00000003 /* MarkdownInputView.swift in Sources */,
+				PA1B2C3D4E5F6A7B00000001 /* PasteAwareTextEditor.swift in Sources */,
 				8A1B2C3D4E5F6A7B00000004 /* PreviewWebView.swift in Sources */,
 				8A1B2C3D4E5F6A7B00000005 /* ThemePicker.swift in Sources */,
 				8A1B2C3D4E5F6A7B0000000F /* WelcomeView.swift in Sources */,

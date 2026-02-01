@@ -5,8 +5,6 @@ struct ConversationEntryView: View {
     @Binding var entry: ConversationEntry
     let onDelete: () -> Void
 
-    @FocusState private var isTextEditorFocused: Bool
-
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -29,7 +27,7 @@ struct ConversationEntryView: View {
                 .buttonStyle(.borderless)
             }
 
-            TextEditor(text: $entry.content)
+            PasteAwareTextEditor(text: $entry.content)
                 .frame(minHeight: 80)
                 .padding(8)
                 .background(roleBackgroundColor)
@@ -38,7 +36,6 @@ struct ConversationEntryView: View {
                     RoundedRectangle(cornerRadius: 8)
                         .stroke(roleBorderColor, lineWidth: 1)
                 )
-                .focused($isTextEditorFocused)
         }
         .padding(.vertical, 4)
     }
