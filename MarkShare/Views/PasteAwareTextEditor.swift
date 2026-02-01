@@ -122,6 +122,14 @@ class MarkdownPasteTextView: UITextView {
             result += text
         }
 
+        // Insert newline before inline numbered list items (RTF/HTML path only - heuristic)
+        // Matches: non-newline char, optional space, number with period, required space after
+        result = result.replacingOccurrences(
+            of: "([^\\n\\d])[ \\t]*((\\*\\*)?\\d+\\.(\\*\\*)?)[ \\t]+",
+            with: "$1\n$2 ",
+            options: .regularExpression
+        )
+
         // Apply bullet conversion
         return convertPlainTextToMarkdown(result)
     }
