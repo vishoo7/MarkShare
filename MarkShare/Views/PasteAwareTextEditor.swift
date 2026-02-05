@@ -141,6 +141,14 @@ class MarkdownPasteTextView: UITextView {
         // Remove object replacement characters
         result = result.replacingOccurrences(of: "\u{FFFC}", with: "")
 
+        // Normalize special dash characters to regular hyphens (for table delimiters, etc.)
+        // Using regex to catch all dash-like unicode characters
+        result = result.replacingOccurrences(
+            of: "[\u{2010}-\u{2015}\u{2212}\u{2E3A}\u{2E3B}\u{FE58}\u{FE63}\u{FF0D}]",
+            with: "-",
+            options: .regularExpression
+        )
+
         // Convert bullet characters to dash (only when at line start)
         result = result.replacingOccurrences(
             of: "(^|\\n)([ \\t]*)[•◦‣▪▸►∙][ \\t]*",

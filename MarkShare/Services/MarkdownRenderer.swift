@@ -545,12 +545,24 @@ struct MarkdownRenderer {
         let trimmed = line.trimmingCharacters(in: .whitespaces)
         guard trimmed.contains("|") else { return false }
 
+        // Set of characters that act as dashes in table delimiters
+        let dashChars = CharacterSet(charactersIn: "-\u{2010}\u{2011}\u{2012}\u{2013}\u{2014}\u{2015}\u{2212}\u{2E3A}\u{2E3B}\u{FE58}\u{FE63}\u{FF0D}")
+
         let cells = trimmed.components(separatedBy: "|").filter { !$0.isEmpty }
         for cell in cells {
             let cellTrimmed = cell.trimmingCharacters(in: .whitespaces)
-            let pattern = "^:?-+:?$"
-            if cellTrimmed.range(of: pattern, options: .regularExpression) == nil {
-                return false
+
+            // Remove optional colons at start/end
+            var content = cellTrimmed
+            if content.hasPrefix(":") { content = String(content.dropFirst()) }
+            if content.hasSuffix(":") { content = String(content.dropLast()) }
+
+            // Check if remaining content is all dash-like characters
+            guard !content.isEmpty else { return false }
+            for scalar in content.unicodeScalars {
+                if !dashChars.contains(scalar) {
+                    return false
+                }
             }
         }
         return !cells.isEmpty
