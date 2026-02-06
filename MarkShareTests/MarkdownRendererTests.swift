@@ -109,6 +109,24 @@ final class MarkdownRendererTests: XCTestCase {
         XCTAssertTrue(html.contains("<code>code</code>"))
     }
 
+    func testNestedBoldItalic() {
+        let html = renderer.convertToHTML("**bold *italic* bold**")
+        XCTAssertTrue(html.contains("<strong>bold <em>italic</em> bold</strong>"))
+    }
+
+    func testBoldItalicCombined() {
+        let html = renderer.convertToHTML("***bold italic***")
+        XCTAssertTrue(html.contains("<strong>"))
+        XCTAssertTrue(html.contains("<em>"))
+        XCTAssertTrue(html.contains("bold italic"))
+    }
+
+    func testItalicInsideBold() {
+        let html = renderer.convertToHTML("**check the *docs* first**")
+        XCTAssertTrue(html.contains("<strong>"))
+        XCTAssertTrue(html.contains("<em>docs</em>"))
+    }
+
     // MARK: - Links and Images
 
     func testLink() {

@@ -440,24 +440,24 @@ struct MarkdownRenderer {
 
         // Bold: **text** or __text__
         result = result.replacingOccurrences(
-            of: "\\*\\*([^*]+)\\*\\*",
+            of: "\\*\\*(.+?)\\*\\*",
             with: "<strong>$1</strong>",
             options: .regularExpression
         )
         result = result.replacingOccurrences(
-            of: "__([^_]+)__",
+            of: "__(.+?)__",
             with: "<strong>$1</strong>",
             options: .regularExpression
         )
 
         // Italic: *text* or _text_
         result = result.replacingOccurrences(
-            of: "\\*([^*]+)\\*",
+            of: "\\*(.+?)\\*",
             with: "<em>$1</em>",
             options: .regularExpression
         )
         result = result.replacingOccurrences(
-            of: "(?<![a-zA-Z0-9])_([^_]+)_(?![a-zA-Z0-9])",
+            of: "(?<![a-zA-Z0-9])_(.+?)_(?![a-zA-Z0-9])",
             with: "<em>$1</em>",
             options: .regularExpression
         )
