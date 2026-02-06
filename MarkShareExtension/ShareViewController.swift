@@ -199,15 +199,12 @@ class ShareViewController: UIViewController {
     private func generatePDF(from html: String, completion: @escaping (URL?) -> Void) {
         let printFormatter = UIMarkupTextPrintFormatter(markupText: html)
 
-        let renderer = UIPrintPageRenderer()
-        renderer.addPrintFormatter(printFormatter, startingAtPageAt: 0)
-
         let pageSize = CGSize(width: 612, height: 792) // US Letter
         let pageRect = CGRect(origin: .zero, size: pageSize)
         let printableRect = pageRect.insetBy(dx: 36, dy: 36)
 
-        renderer.setValue(pageRect, forKey: "paperRect")
-        renderer.setValue(printableRect, forKey: "printableRect")
+        let renderer = PDFPageRenderer(paperRect: pageRect, printableRect: printableRect)
+        renderer.addPrintFormatter(printFormatter, startingAtPageAt: 0)
 
         let pdfData = NSMutableData()
         UIGraphicsBeginPDFContextToData(pdfData, pageRect, nil)
@@ -368,4 +365,20 @@ struct ExtensionMarkdownRenderer {
             .replacingOccurrences(of: "<", with: "&lt;")
             .replacingOccurrences(of: ">", with: "&gt;")
     }
+}
+
+// MARK: - PDF Page Renderer
+
+private class PDFPageRenderer: UIPrintPageRenderer {
+    private let _paperRect: CGRect
+    private let _printableRect: CGRect
+
+    init(paperRect: CGRect, printableRect: CGRect) {
+        _paperRect = paperRect
+        _printableRect = printableRect
+        super.init()
+    }
+
+    override var paperRect: CGRect { _paperRect }
+    override var printableRect: CGRect { _printableRect }
 }

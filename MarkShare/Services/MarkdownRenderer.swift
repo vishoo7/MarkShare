@@ -532,7 +532,7 @@ struct MarkdownRenderer {
 
         let patterns = ["---", "***", "___"]
         for pattern in patterns {
-            let char = pattern.first!
+            guard let char = pattern.first else { continue }
             let filtered = trimmed.filter { $0 == char || $0 == " " }
             if filtered == trimmed && trimmed.filter({ $0 == char }).count >= 3 {
                 return true
