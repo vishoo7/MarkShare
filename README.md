@@ -31,11 +31,14 @@ AI tools like Claude and ChatGPT give you responses in Markdown. If you want to 
   - Tables (GFM style)
   - Horizontal rules
 
-- **4 Beautiful Themes**
+- **7 Beautiful Themes**
   - Light
-  - Dark
   - GitHub
   - Sepia
+  - Dark
+  - Solarized
+  - Nord
+  - Dracula
 
 - **Multiple Export Formats**
   - PDF — Full document with pagination
@@ -113,7 +116,10 @@ MarkShare/
         ├── light.css
         ├── dark.css
         ├── github.css
-        └── sepia.css
+        ├── sepia.css
+        ├── solarized.css
+        ├── nord.css
+        └── dracula.css
 ```
 
 ## Contributing

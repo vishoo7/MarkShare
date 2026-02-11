@@ -7,7 +7,6 @@ import WebKit
 class ShareViewController: UIViewController {
 
     private var webView: WKWebView!
-    private var toolbar: UIToolbar!
     private var markdownText: String = ""
 
     private let renderer = ExtensionMarkdownRenderer()
@@ -49,35 +48,76 @@ class ShareViewController: UIViewController {
         webView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(webView)
 
-        // Toolbar with theme options
-        toolbar = UIToolbar(frame: .zero)
-        toolbar.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(toolbar)
+        // Theme bar with scrollable buttons
+        let themeBar = UIView(frame: .zero)
+        themeBar.translatesAutoresizingMaskIntoConstraints = false
+        themeBar.backgroundColor = .secondarySystemBackground
+        view.addSubview(themeBar)
 
-        let themeLabel = UIBarButtonItem(title: "Theme:", style: .plain, target: nil, action: nil)
-        themeLabel.isEnabled = false
+        let scrollView = UIScrollView(frame: .zero)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.alwaysBounceHorizontal = true
+        themeBar.addSubview(scrollView)
 
-        let lightButton = UIBarButtonItem(title: "Light", style: .plain, target: self, action: #selector(selectLight))
-        let darkButton = UIBarButtonItem(title: "Dark", style: .plain, target: self, action: #selector(selectDark))
-        let githubButton = UIBarButtonItem(title: "GitHub", style: .plain, target: self, action: #selector(selectGithub))
-        let sepiaButton = UIBarButtonItem(title: "Sepia", style: .plain, target: self, action: #selector(selectSepia))
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .horizontal
+        stack.spacing = 4
+        stack.alignment = .center
+        scrollView.addSubview(stack)
 
-        toolbar.items = [themeLabel, flexSpace, lightButton, darkButton, githubButton, sepiaButton]
+        let themeLabel = UILabel()
+        themeLabel.text = "Theme:"
+        themeLabel.font = .systemFont(ofSize: 14, weight: .medium)
+        themeLabel.textColor = .secondaryLabel
+        themeLabel.setContentHuggingPriority(.required, for: .horizontal)
+        stack.addArrangedSubview(themeLabel)
+
+        let themes: [(String, Selector)] = [
+            ("Light", #selector(selectLight)),
+            ("GitHub", #selector(selectGithub)),
+            ("Sepia", #selector(selectSepia)),
+            ("Dark", #selector(selectDark)),
+            ("Solarized", #selector(selectSolarized)),
+            ("Nord", #selector(selectNord)),
+            ("Dracula", #selector(selectDracula)),
+        ]
+
+        for (title, action) in themes {
+            let button = UIButton(type: .system)
+            button.setTitle(title, for: .normal)
+            button.titleLabel?.font = .systemFont(ofSize: 14, weight: .medium)
+            button.addTarget(self, action: action, for: .touchUpInside)
+            button.contentEdgeInsets = UIEdgeInsets(top: 6, left: 10, bottom: 6, right: 10)
+            stack.addArrangedSubview(button)
+        }
 
         NSLayoutConstraint.activate([
             navBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             navBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             navBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            toolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            toolbar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            toolbar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            themeBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            themeBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            themeBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            themeBar.heightAnchor.constraint(equalToConstant: 44),
+
+            scrollView.topAnchor.constraint(equalTo: themeBar.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: themeBar.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: themeBar.leadingAnchor, constant: 8),
+            scrollView.trailingAnchor.constraint(equalTo: themeBar.trailingAnchor, constant: -8),
+
+            stack.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            stack.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            stack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            stack.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
 
             webView.topAnchor.constraint(equalTo: navBar.bottomAnchor),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            webView.bottomAnchor.constraint(equalTo: toolbar.topAnchor)
+            webView.bottomAnchor.constraint(equalTo: themeBar.topAnchor)
         ])
     }
 
@@ -164,6 +204,21 @@ class ShareViewController: UIViewController {
 
     @objc private func selectSepia() {
         currentTheme = "sepia"
+        updatePreview()
+    }
+
+    @objc private func selectSolarized() {
+        currentTheme = "solarized"
+        updatePreview()
+    }
+
+    @objc private func selectNord() {
+        currentTheme = "nord"
+        updatePreview()
+    }
+
+    @objc private func selectDracula() {
+        currentTheme = "dracula"
         updatePreview()
     }
 

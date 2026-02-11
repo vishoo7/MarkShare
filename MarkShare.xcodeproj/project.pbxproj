@@ -27,6 +27,9 @@
 		8A1B2C3D4E5F6A7B0000000C /* dark.css in Resources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B0000001C /* dark.css */; };
 		8A1B2C3D4E5F6A7B0000000D /* github.css in Resources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B0000001D /* github.css */; };
 		8A1B2C3D4E5F6A7B0000000E /* sepia.css in Resources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B0000001E /* sepia.css */; };
+		TH1B2C3D4E5F6A7B00000001 /* solarized.css in Resources */ = {isa = PBXBuildFile; fileRef = TH1B2C3D4E5F6A7B00000011 /* solarized.css */; };
+		TH1B2C3D4E5F6A7B00000002 /* nord.css in Resources */ = {isa = PBXBuildFile; fileRef = TH1B2C3D4E5F6A7B00000012 /* nord.css */; };
+		TH1B2C3D4E5F6A7B00000003 /* dracula.css in Resources */ = {isa = PBXBuildFile; fileRef = TH1B2C3D4E5F6A7B00000013 /* dracula.css */; };
 		9B2C3D4E5F6A7B8C00000001 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B2C3D4E5F6A7B8C00000011 /* ShareViewController.swift */; };
 		9B2C3D4E5F6A7B8C00000002 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B2C3D4E5F6A7B8C00000012 /* MainInterface.storyboard */; };
 		9B2C3D4E5F6A7B8C00000003 /* MarkShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 9B2C3D4E5F6A7B8C00000021 /* MarkShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -34,6 +37,9 @@
 		9B2C3D4E5F6A7B8C00000005 /* dark.css in Resources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B0000001C /* dark.css */; };
 		9B2C3D4E5F6A7B8C00000006 /* github.css in Resources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B0000001D /* github.css */; };
 		9B2C3D4E5F6A7B8C00000007 /* sepia.css in Resources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B0000001E /* sepia.css */; };
+		TH2C3D4E5F6A7B8C00000001 /* solarized.css in Resources */ = {isa = PBXBuildFile; fileRef = TH1B2C3D4E5F6A7B00000011 /* solarized.css */; };
+		TH2C3D4E5F6A7B8C00000002 /* nord.css in Resources */ = {isa = PBXBuildFile; fileRef = TH1B2C3D4E5F6A7B00000012 /* nord.css */; };
+		TH2C3D4E5F6A7B8C00000003 /* dracula.css in Resources */ = {isa = PBXBuildFile; fileRef = TH1B2C3D4E5F6A7B00000013 /* dracula.css */; };
 		TC1B2C3D4E5F6A7B00000001 /* MarkdownRendererTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TC1B2C3D4E5F6A7B00000011 /* MarkdownRendererTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -89,6 +95,9 @@
 		8A1B2C3D4E5F6A7B0000001C /* dark.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = dark.css; sourceTree = "<group>"; };
 		8A1B2C3D4E5F6A7B0000001D /* github.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = github.css; sourceTree = "<group>"; };
 		8A1B2C3D4E5F6A7B0000001E /* sepia.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = sepia.css; sourceTree = "<group>"; };
+		TH1B2C3D4E5F6A7B00000011 /* solarized.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = solarized.css; sourceTree = "<group>"; };
+		TH1B2C3D4E5F6A7B00000012 /* nord.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = nord.css; sourceTree = "<group>"; };
+		TH1B2C3D4E5F6A7B00000013 /* dracula.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = dracula.css; sourceTree = "<group>"; };
 		8A1B2C3D4E5F6A7B0000001F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8A1B2C3D4E5F6A7B00000020 /* MarkShare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarkShare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B2C3D4E5F6A7B8C00000011 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
@@ -206,6 +215,9 @@
 				8A1B2C3D4E5F6A7B0000001C /* dark.css */,
 				8A1B2C3D4E5F6A7B0000001D /* github.css */,
 				8A1B2C3D4E5F6A7B0000001E /* sepia.css */,
+				TH1B2C3D4E5F6A7B00000011 /* solarized.css */,
+				TH1B2C3D4E5F6A7B00000012 /* nord.css */,
+				TH1B2C3D4E5F6A7B00000013 /* dracula.css */,
 			);
 			path = Themes;
 			sourceTree = "<group>";
@@ -347,6 +359,9 @@
 				8A1B2C3D4E5F6A7B0000000C /* dark.css in Resources */,
 				8A1B2C3D4E5F6A7B0000000D /* github.css in Resources */,
 				8A1B2C3D4E5F6A7B0000000E /* sepia.css in Resources */,
+				TH1B2C3D4E5F6A7B00000001 /* solarized.css in Resources */,
+				TH1B2C3D4E5F6A7B00000002 /* nord.css in Resources */,
+				TH1B2C3D4E5F6A7B00000003 /* dracula.css in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,6 +374,9 @@
 				9B2C3D4E5F6A7B8C00000005 /* dark.css in Resources */,
 				9B2C3D4E5F6A7B8C00000006 /* github.css in Resources */,
 				9B2C3D4E5F6A7B8C00000007 /* sepia.css in Resources */,
+				TH2C3D4E5F6A7B8C00000001 /* solarized.css in Resources */,
+				TH2C3D4E5F6A7B8C00000002 /* nord.css in Resources */,
+				TH2C3D4E5F6A7B8C00000003 /* dracula.css in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
