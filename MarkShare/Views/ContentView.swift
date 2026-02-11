@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var exportError: String?
     @State private var showingError = false
     @State private var showingClearConfirmation = false
+    @State private var showingAbout = false
 
     // Conversation mode state
     @State private var isConversationMode = false
@@ -53,11 +54,23 @@ struct ContentView: View {
                     }
                 }
             }
-            .navigationTitle("MarkShare")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     ThemePicker(selectedTheme: $themeManager.currentTheme)
+                }
+
+                ToolbarItem(placement: .principal) {
+                    Button {
+                        showingAbout = true
+                    } label: {
+                        Image("AppIconImage")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 28, height: 28)
+                            .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                    }
+                    .accessibilityLabel("About MarkShare")
                 }
 
                 ToolbarItemGroup(placement: .topBarTrailing) {
@@ -96,6 +109,9 @@ struct ContentView: View {
                 if let url = exportedFileURL {
                     ShareSheet(items: [url])
                 }
+            }
+            .sheet(isPresented: $showingAbout) {
+                AboutView()
             }
             .alert("Export Error", isPresented: $showingError) {
                 Button("OK", role: .cancel) {}
