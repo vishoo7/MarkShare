@@ -15,6 +15,7 @@ struct AboutView: View {
                     headerSection
                     whatItDoesSection
                     contributeSection
+                    shareSection
                     supportSection
                 }
                 .padding()
@@ -79,6 +80,34 @@ struct AboutView: View {
                 Link(destination: URL(string: githubURL)!) {
                     HStack {
                         Text("View on GitHub")
+                        Spacer()
+                        Image(systemName: "arrow.up.right")
+                    }
+                    .font(.subheadline.weight(.medium))
+                }
+                .padding(.top, 4)
+            }
+        }
+    }
+
+    // MARK: - Share
+
+    private var shareSection: some View {
+        sectionCard {
+            VStack(alignment: .leading, spacing: 8) {
+                Label("Share MarkShare", systemImage: "square.and.arrow.up")
+                    .font(.headline)
+
+                Text("Enjoying MarkShare? Share it with friends and colleagues.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                ShareLink(
+                    item: URL(string: "https://apps.apple.com/app/markshare/id6758284484")!,
+                    message: Text("Check out MarkShare — render and share Markdown as PDF, PNG, or HTML, all on-device.")
+                ) {
+                    HStack {
+                        Text("Share with Friends")
                         Spacer()
                         Image(systemName: "arrow.up.right")
                     }

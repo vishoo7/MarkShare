@@ -1,9 +1,12 @@
 import SwiftUI
+import StoreKit
 
 /// Main content view with markdown editor and preview
 struct ContentView: View {
     @EnvironmentObject var themeManager: ThemeManager
+    @Environment(\.requestReview) var requestReview
 
+    @AppStorage("exportCount") private var exportCount = 0
     @State private var markdownText = ""
     @State private var showingPreview = false
     @State private var showingExportOptions = false
@@ -205,6 +208,10 @@ struct ContentView: View {
             let url = try await exportService.export(html: renderedHTML, format: format)
             exportedFileURL = url
             showingShareSheet = true
+            exportCount += 1
+            if exportCount == 100 {
+                requestReview()
+            }
         } catch {
             exportError = error.localizedDescription
             showingError = true
