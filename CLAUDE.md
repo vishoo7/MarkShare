@@ -87,6 +87,15 @@ New `.swift` files must be added to `MarkShare.xcodeproj/project.pbxproj` in 4 p
 - **JavaScript disabled** in preview WebView (enabled only in export for content measurement)
 - **Share extension** has its own simplified MarkdownRenderer to avoid framework dependencies
 
+## iOS Development
+When implementing iOS UI changes, always verify the implementation renders correctly at runtime, not just that it compiles. A successful build does NOT mean the feature works. After UI changes, remind me to test in the simulator or on-device before considering the task complete.
+
+### CloudKit / iCloud Sync
+For iCloud/CloudKit issues: always check whether the CloudKit schema has been deployed to the Production environment before debugging code-level sync problems. Many sync issues are infrastructure/console problems, not code bugs.
+
+### App Store Links
+When dealing with App Store URLs, use the format `https://apps.apple.com/app/id{APP_ID}` (no country code). Do not iterate on URL format — this is the canonical universal link format Apple supports.
+
 ## AI Thinking Block Handling
 The app specially handles `<thinking>` and `<think>` tags from AI-generated content:
 

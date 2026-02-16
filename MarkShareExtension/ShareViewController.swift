@@ -8,6 +8,7 @@ class ShareViewController: UIViewController {
 
     private var webView: WKWebView!
     private var markdownText: String = ""
+    private var shareBarButton: UIBarButtonItem?
 
     private let renderer = ExtensionMarkdownRenderer()
     private var currentTheme: String = "light"
@@ -34,11 +35,13 @@ class ShareViewController: UIViewController {
             target: self,
             action: #selector(cancelTapped)
         )
-        navItem.rightBarButtonItem = UIBarButtonItem(
+        let shareButton = UIBarButtonItem(
             barButtonSystemItem: .action,
             target: self,
             action: #selector(shareTapped)
         )
+        navItem.rightBarButtonItem = shareButton
+        self.shareBarButton = shareButton
         navBar.items = [navItem]
 
         // Web view for preview
@@ -240,7 +243,14 @@ class ShareViewController: UIViewController {
             }
 
             let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-            activityVC.popoverPresentationController?.barButtonItem = self?.navigationItem.rightBarButtonItem
+            if let popover = activityVC.popoverPresentationController {
+                if let button = self?.shareBarButton {
+                    popover.barButtonItem = button
+                } else {
+                    popover.sourceView = self?.view
+                    popover.sourceRect = CGRect(x: (self?.view.bounds.midX ?? 0), y: 0, width: 0, height: 0)
+                }
+            }
 
             activityVC.completionWithItemsHandler = { _, _, _, _ in
                 // Clean up temp file
@@ -411,7 +421,21 @@ struct ExtensionMarkdownRenderer {
         result = result.replacingOccurrences(of: "\\*\\*([^*]+)\\*\\*", with: "<strong>$1</strong>", options: .regularExpression)
         result = result.replacingOccurrences(of: "\\*([^*]+)\\*", with: "<em>$1</em>", options: .regularExpression)
         result = result.replacingOccurrences(of: "`([^`]+)`", with: "<code>$1</code>", options: .regularExpression)
-        result = result.replacingOccurrences(of: "\\[([^\\]]*)\\]\\(([^)]+)\\)", with: "<a href=\"$2\">$1</a>", options: .regularExpression)
+
+        // Links: [text](url) — with URL sanitization
+        if let linkRegex = try? NSRegularExpression(pattern: "\\[([^\\]]*)\\]\\(([^)]+)\\)") {
+            let nsRange = NSRange(result.startIndex..., in: result)
+            let matches = linkRegex.matches(in: result, range: nsRange)
+            for match in matches.reversed() {
+                guard let fullRange = Range(match.range, in: result),
+                      let textRange = Range(match.range(at: 1), in: result),
+                      let urlRange = Range(match.range(at: 2), in: result) else { continue }
+                let linkText = String(result[textRange])
+                let url = sanitizeURL(String(result[urlRange]))
+                result.replaceSubrange(fullRange, with: "<a href=\"\(url)\">\(linkText)</a>")
+            }
+        }
+
         return result
     }
 
@@ -419,6 +443,18 @@ struct ExtensionMarkdownRenderer {
         text.replacingOccurrences(of: "&", with: "&amp;")
             .replacingOccurrences(of: "<", with: "&lt;")
             .replacingOccurrences(of: ">", with: "&gt;")
+            .replacingOccurrences(of: "\"", with: "&quot;")
+    }
+
+    /// Validates URL scheme to prevent javascript: and other dangerous protocols
+    private func sanitizeURL(_ url: String) -> String {
+        let trimmed = url.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        if trimmed.hasPrefix("http://") || trimmed.hasPrefix("https://") ||
+           trimmed.hasPrefix("mailto:") || trimmed.hasPrefix("data:") ||
+           trimmed.hasPrefix("#") || !trimmed.contains(":") {
+            return url
+        }
+        return "#"
     }
 }
 

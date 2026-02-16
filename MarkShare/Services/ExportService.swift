@@ -183,6 +183,20 @@ private class NavigationDelegate: NSObject, WKNavigationDelegate {
         self.completion = completion
     }
 
+    // Block remote resource loads (images, fonts, stylesheets)
+    func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationAction: WKNavigationAction,
+        decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
+    ) {
+        if let scheme = navigationAction.request.url?.scheme?.lowercased(),
+           scheme == "http" || scheme == "https" {
+            decisionHandler(.cancel)
+            return
+        }
+        decisionHandler(.allow)
+    }
+
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         // Give the page a moment to render
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {

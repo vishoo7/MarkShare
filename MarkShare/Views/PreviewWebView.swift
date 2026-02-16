@@ -32,13 +32,20 @@ struct PreviewWebView: UIViewRepresentable {
     }
 
     class Coordinator: NSObject, WKNavigationDelegate {
-        // Prevent navigation to external links
+        // Prevent navigation to external links and block remote resource loads
         func webView(
             _ webView: WKWebView,
             decidePolicyFor navigationAction: WKNavigationAction,
             decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
         ) {
-            // Only allow initial HTML load
+            // Block any request with an http(s) scheme (remote images, fonts, etc.)
+            if let scheme = navigationAction.request.url?.scheme?.lowercased(),
+               scheme == "http" || scheme == "https" {
+                decisionHandler(.cancel)
+                return
+            }
+
+            // Only allow initial HTML load (about:blank from loadHTMLString)
             if navigationAction.navigationType == .other {
                 decisionHandler(.allow)
             } else {

@@ -424,19 +424,33 @@ struct MarkdownRenderer {
     private func parseInline(_ text: String) -> String {
         var result = escapeHTML(text)
 
-        // Images: ![alt](url)
-        result = result.replacingOccurrences(
-            of: "!\\[([^\\]]*)\\]\\(([^)]+)\\)",
-            with: "<img src=\"$2\" alt=\"$1\">",
-            options: .regularExpression
-        )
+        // Images: ![alt](url) — with URL sanitization
+        if let imageRegex = try? NSRegularExpression(pattern: "!\\[([^\\]]*)\\]\\(([^)]+)\\)") {
+            let nsRange = NSRange(result.startIndex..., in: result)
+            let matches = imageRegex.matches(in: result, range: nsRange)
+            for match in matches.reversed() {
+                guard let fullRange = Range(match.range, in: result),
+                      let altRange = Range(match.range(at: 1), in: result),
+                      let urlRange = Range(match.range(at: 2), in: result) else { continue }
+                let alt = String(result[altRange])
+                let url = sanitizeURL(String(result[urlRange]))
+                result.replaceSubrange(fullRange, with: "<img src=\"\(url)\" alt=\"\(alt)\">")
+            }
+        }
 
-        // Links: [text](url)
-        result = result.replacingOccurrences(
-            of: "\\[([^\\]]*)\\]\\(([^)]+)\\)",
-            with: "<a href=\"$2\">$1</a>",
-            options: .regularExpression
-        )
+        // Links: [text](url) — with URL sanitization
+        if let linkRegex = try? NSRegularExpression(pattern: "\\[([^\\]]*)\\]\\(([^)]+)\\)") {
+            let nsRange = NSRange(result.startIndex..., in: result)
+            let matches = linkRegex.matches(in: result, range: nsRange)
+            for match in matches.reversed() {
+                guard let fullRange = Range(match.range, in: result),
+                      let textRange = Range(match.range(at: 1), in: result),
+                      let urlRange = Range(match.range(at: 2), in: result) else { continue }
+                let linkText = String(result[textRange])
+                let url = sanitizeURL(String(result[urlRange]))
+                result.replaceSubrange(fullRange, with: "<a href=\"\(url)\">\(linkText)</a>")
+            }
+        }
 
         // Bold: **text** or __text__
         result = result.replacingOccurrences(
@@ -601,7 +615,19 @@ struct MarkdownRenderer {
         result = result.replacingOccurrences(of: "&", with: "&amp;")
         result = result.replacingOccurrences(of: "<", with: "&lt;")
         result = result.replacingOccurrences(of: ">", with: "&gt;")
+        result = result.replacingOccurrences(of: "\"", with: "&quot;")
         return result
+    }
+
+    /// Validates URL scheme to prevent javascript: and other dangerous protocols
+    private func sanitizeURL(_ url: String) -> String {
+        let trimmed = url.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        if trimmed.hasPrefix("http://") || trimmed.hasPrefix("https://") ||
+           trimmed.hasPrefix("mailto:") || trimmed.hasPrefix("data:") ||
+           trimmed.hasPrefix("#") || !trimmed.contains(":") {
+            return url
+        }
+        return "#"
     }
 
     private func wrapInHTMLDocument(body: String, css: String) -> String {
