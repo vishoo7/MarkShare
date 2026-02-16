@@ -49,11 +49,13 @@ AI tools like Claude and ChatGPT give you responses in Markdown. If you want to 
   - iPhone: Toggle between editor and preview
   - iPad: Side-by-side editor and live preview
 
-## Privacy
+## Privacy & Security
 
 MarkShare is designed with privacy as a core principle:
 
 - **No network access** — All processing happens on-device
+- **Remote resource blocking** — WebViews block all HTTP/HTTPS requests, preventing remote image/font/stylesheet loading even if markdown contains external URLs
+- **URL sanitization** — Links and images are validated to block dangerous URI schemes (e.g., `javascript:`)
 - **No analytics or tracking** — Your content stays yours
 - **No account required** — Just open and use
 - **JavaScript disabled** in preview (enabled only for export measurements)
