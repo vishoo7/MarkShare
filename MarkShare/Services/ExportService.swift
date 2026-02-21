@@ -41,9 +41,9 @@ final class ExportService: NSObject {
     private var exportContinuation: CheckedContinuation<Data, Error>?
 
     /// Exports the HTML content to the specified format
-    func export(html: String, format: ExportFormat) async throws -> URL {
+    func export(html: String, format: ExportFormat, markdown: String = "") async throws -> URL {
         let data = try await generateData(html: html, format: format)
-        return try saveToTemporaryFile(data: data, format: format)
+        return try saveToTemporaryFile(data: data, format: format, markdown: markdown)
     }
 
     /// Generates data for the specified format
@@ -164,9 +164,41 @@ final class ExportService: NSObject {
         }
     }
 
+    /// Extracts a filename from the first markdown heading, or falls back to a date-based name
+    private func generateFileName(from markdown: String, format: ExportFormat) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd_HHmmss"
+        let timeStamp = formatter.string(from: Date())
+
+        // Look for the first heading (#, ##, ###, etc.)
+        let lines = markdown.components(separatedBy: .newlines)
+        for line in lines {
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+            if trimmed.hasPrefix("# ") || trimmed == "#" {
+                // Strip the leading # and whitespace
+                let title = String(trimmed.dropFirst()).trimmingCharacters(in: .whitespaces)
+                if !title.isEmpty {
+                    // Sanitize: keep alphanumerics, spaces, hyphens; replace spaces with underscores
+                    let sanitized = title
+                        .components(separatedBy: CharacterSet.alphanumerics.union(CharacterSet(charactersIn: " -")).inverted)
+                        .joined()
+                        .trimmingCharacters(in: .whitespaces)
+                        .replacingOccurrences(of: " ", with: "_")
+                    if !sanitized.isEmpty {
+                        let truncated = String(sanitized.prefix(60))
+                        return "\(truncated)_\(timeStamp).\(format.fileExtension)"
+                    }
+                }
+            }
+        }
+
+        // Fallback: date-based name
+        return "MarkShare_\(timeStamp).\(format.fileExtension)"
+    }
+
     /// Saves data to a temporary file and returns its URL
-    private func saveToTemporaryFile(data: Data, format: ExportFormat) throws -> URL {
-        let fileName = "MarkShare_Export_\(Date().timeIntervalSince1970).\(format.fileExtension)"
+    private func saveToTemporaryFile(data: Data, format: ExportFormat, markdown: String = "") throws -> URL {
+        let fileName = generateFileName(from: markdown, format: format)
         let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
 
         try data.write(to: tempURL)

@@ -205,7 +205,7 @@ struct ContentView: View {
         isExporting = true
 
         do {
-            let url = try await exportService.export(html: renderedHTML, format: format)
+            let url = try await exportService.export(html: renderedHTML, format: format, markdown: markdownText)
             exportedFileURL = url
             showingShareSheet = true
             exportCount += 1
