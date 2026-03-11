@@ -7,7 +7,7 @@ struct ContentView: View {
     @Environment(\.requestReview) var requestReview
 
     @AppStorage("exportCount") private var exportCount = 0
-    @State private var markdownText = ""
+    @AppStorage("lastMarkdownText") private var markdownText = ""
     @State private var showingPreview = false
     @State private var showingExportOptions = false
     @State private var showingShareSheet = false
