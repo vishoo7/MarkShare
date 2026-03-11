@@ -134,10 +134,43 @@ struct ContentView: View {
     // MARK: - Subviews
 
     private var editorView: some View {
-        VStack(spacing: 0) {
-            MarkdownInputView(text: $markdownText)
-                .padding(.horizontal, 8)
+        ZStack {
+            VStack(spacing: 0) {
+                MarkdownInputView(text: $markdownText)
+                    .padding(.horizontal, 8)
+            }
+
+            if markdownText.isEmpty {
+                clipboardPasteOverlay
+            }
         }
+    }
+
+    private var clipboardPasteOverlay: some View {
+        VStack(spacing: 12) {
+            Spacer()
+
+            Button {
+                if let clipboardText = UIPasteboard.general.string, !clipboardText.isEmpty {
+                    markdownText = clipboardText
+                }
+            } label: {
+                VStack(spacing: 8) {
+                    Image(systemName: "doc.on.clipboard")
+                        .font(.system(size: 28))
+                    Text("Paste from Clipboard")
+                        .font(.subheadline)
+                }
+                .foregroundStyle(.secondary)
+                .padding(.vertical, 16)
+                .padding(.horizontal, 24)
+                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
+            }
+
+            Spacer()
+                .frame(height: 60)
+        }
+        .allowsHitTesting(true)
     }
 
     private var previewView: some View {
