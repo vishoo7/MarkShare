@@ -85,6 +85,7 @@ class ShareViewController: UIViewController {
             ("Solarized", #selector(selectSolarized)),
             ("Nord", #selector(selectNord)),
             ("Dracula", #selector(selectDracula)),
+            ("Gruvbox", #selector(selectGruvbox)),
         ]
 
         for (title, action) in themes {
@@ -224,6 +225,11 @@ class ShareViewController: UIViewController {
 
     @objc private func selectDracula() {
         currentTheme = "dracula"
+        updatePreview()
+    }
+
+    @objc private func selectGruvbox() {
+        currentTheme = "gruvbox"
         updatePreview()
     }
 

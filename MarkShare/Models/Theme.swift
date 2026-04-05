@@ -9,6 +9,7 @@ enum Theme: String, CaseIterable, Identifiable {
     case solarized
     case nord
     case dracula
+    case gruvbox
 
     var id: String { rawValue }
 
@@ -22,6 +23,7 @@ enum Theme: String, CaseIterable, Identifiable {
         case .solarized: return "Solarized"
         case .nord: return "Nord"
         case .dracula: return "Dracula"
+        case .gruvbox: return "Gruvbox"
         }
     }
 
@@ -40,6 +42,7 @@ enum Theme: String, CaseIterable, Identifiable {
         case .solarized: return Color(red: 0.0, green: 0.169, blue: 0.212)
         case .nord: return Color(red: 0.180, green: 0.204, blue: 0.251)
         case .dracula: return Color(red: 0.157, green: 0.165, blue: 0.212)
+        case .gruvbox: return Color(red: 0.157, green: 0.157, blue: 0.157)
         }
     }
 
@@ -53,6 +56,7 @@ enum Theme: String, CaseIterable, Identifiable {
         case .solarized: return Color(red: 0.514, green: 0.580, blue: 0.588)
         case .nord: return Color(red: 0.847, green: 0.871, blue: 0.914)
         case .dracula: return Color(red: 0.973, green: 0.973, blue: 0.949)
+        case .gruvbox: return Color(red: 0.922, green: 0.859, blue: 0.698)
         }
     }
 
@@ -66,6 +70,7 @@ enum Theme: String, CaseIterable, Identifiable {
         case .solarized: return Color(red: 0.149, green: 0.545, blue: 0.824)
         case .nord: return Color(red: 0.533, green: 0.753, blue: 0.816)
         case .dracula: return Color(red: 0.741, green: 0.576, blue: 0.976)
+        case .gruvbox: return Color(red: 0.980, green: 0.741, blue: 0.184)
         }
     }
 
@@ -79,6 +84,7 @@ enum Theme: String, CaseIterable, Identifiable {
         case .solarized: return "sunset.fill"
         case .nord: return "snowflake"
         case .dracula: return "wand.and.stars"
+        case .gruvbox: return "flame.fill"
         }
     }
 }
