@@ -181,7 +181,9 @@ class ShareViewController: UIViewController {
     }
 
     private func loadCSS(for theme: String) -> String {
-        guard let url = Bundle.main.url(forResource: theme, withExtension: "css", subdirectory: "Themes"),
+        let url = Bundle.main.url(forResource: theme, withExtension: "css", subdirectory: "Themes")
+            ?? Bundle.main.url(forResource: theme, withExtension: "css")
+        guard let url = url,
               let css = try? String(contentsOf: url, encoding: .utf8) else {
             return ExtensionMarkdownRenderer.fallbackCSS
         }
