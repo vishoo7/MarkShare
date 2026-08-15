@@ -100,7 +100,7 @@ struct MarkdownRenderer {
 
     /// Converts markdown text to HTML body content
     func convertToHTML(_ markdown: String) -> String {
-        var lines = markdown.components(separatedBy: "\n")
+        let lines = markdown.components(separatedBy: "\n")
         var html = ""
         var index = 0
 
@@ -131,32 +131,24 @@ struct MarkdownRenderer {
                 continue
             }
 
-            // Unordered lists
-            if isUnorderedListItem(line) {
-                let (listHTML, newIndex) = parseUnorderedList(lines: lines, startIndex: index)
-                html += listHTML
-                index = newIndex
+            // Horizontal rule — checked before lists so "* * *" isn't read as a bullet
+            if isHorizontalRule(line) {
+                html += "<hr>\n"
+                index += 1
                 continue
             }
 
-            // Ordered lists
-            if isOrderedListItem(line) {
-                let (listHTML, newIndex) = parseOrderedList(lines: lines, startIndex: index)
+            // Lists (ordered, unordered, task — nested to any depth)
+            if listMarker(line) != nil {
+                let (listHTML, newIndex) = parseList(lines: lines, startIndex: index)
                 html += listHTML
-                index = newIndex
+                index = max(newIndex, index + 1)
                 continue
             }
 
             // Headers
             if let headerHTML = parseHeader(line) {
                 html += headerHTML + "\n"
-                index += 1
-                continue
-            }
-
-            // Horizontal rule
-            if isHorizontalRule(line) {
-                html += "<hr>\n"
                 index += 1
                 continue
             }
@@ -207,7 +199,8 @@ struct MarkdownRenderer {
 
     private func parseFencedCodeBlock(lines: [String], startIndex: Int) -> (String, Int) {
         let openingLine = lines[startIndex]
-        let language = String(openingLine.dropFirst(3)).trimmingCharacters(in: .whitespaces)
+        let infoString = String(openingLine.dropFirst(3))
+        let language = SyntaxHighlighter.canonicalLanguage(infoString)
 
         var codeLines: [String] = []
         var index = startIndex + 1
@@ -218,13 +211,16 @@ struct MarkdownRenderer {
                 index += 1
                 break
             }
-            codeLines.append(escapeHTML(line))
+            codeLines.append(line)
             index += 1
         }
 
         let code = codeLines.joined(separator: "\n")
-        let languageAttr = language.isEmpty ? "" : " class=\"language-\(language)\""
-        return ("<pre><code\(languageAttr)>\(code)</code></pre>\n", index)
+        let languageAttr = language.map { " class=\"language-\($0)\"" } ?? ""
+        let body = language.flatMap { SyntaxHighlighter.highlight(code, language: $0) }
+            ?? escapeHTML(code)
+
+        return ("<pre><code\(languageAttr)>\(body)</code></pre>\n", index)
     }
 
     private func parseBlockquote(lines: [String], startIndex: Int) -> (String, Int) {
@@ -258,93 +254,113 @@ struct MarkdownRenderer {
         return ("<blockquote>\(innerHTML)</blockquote>\n", index)
     }
 
-    private func parseUnorderedList(lines: [String], startIndex: Int) -> (String, Int) {
-        var items: [String] = []
-        var index = startIndex
+    /// Parses a list block starting at `startIndex`.
+    ///
+    /// Each item's lines are collected and dedented back to column zero, then run through
+    /// `convertToHTML` recursively — so nested lists, multi-paragraph items, and fenced code
+    /// inside a list item all work without special-casing.
+    private func parseList(lines: [String], startIndex: Int) -> (String, Int) {
+        guard let first = listMarker(lines[startIndex]) else {
+            return ("", startIndex + 1)
+        }
+
+        let ordered = first.ordered
+        let baseIndent = first.indent
+
+        var items: [[String]] = []
         var currentItem: [String] = []
+        var contentIndent = first.contentIndent
+        var index = startIndex
+        var blankRun = 0
 
         while index < lines.count {
             let line = lines[index]
 
-            if isUnorderedListItem(line) {
-                if !currentItem.isEmpty {
-                    items.append(currentItem.joined(separator: "\n"))
-                }
-                currentItem = [extractListItemContent(line)]
+            if line.trimmingCharacters(in: .whitespaces).isEmpty {
+                blankRun += 1
                 index += 1
-            } else if line.hasPrefix("  ") || line.hasPrefix("\t") {
-                // Continuation of current item
+                continue
+            }
+
+            let indent = indentWidth(line)
+            let marker = listMarker(line)
+
+            // A marker at or left of the base indent is either a sibling item or the end of this list
+            if let marker = marker, marker.indent <= baseIndent {
+                if marker.indent < baseIndent { break }
+                if marker.ordered != ordered { break }
+                if blankRun >= 2 { break }
+
+                if !currentItem.isEmpty {
+                    items.append(currentItem)
+                }
+                currentItem = [marker.content]
+                contentIndent = marker.contentIndent
+                blankRun = 0
+                index += 1
+                continue
+            }
+
+            // Anything indented past the base belongs to the current item: a nested list,
+            // a continuation paragraph, an indented code fence, etc.
+            if indent > baseIndent && !currentItem.isEmpty {
+                if blankRun > 0 { currentItem.append("") }
+                currentItem.append(dedent(line, by: min(contentIndent, indent)))
+                blankRun = 0
+                index += 1
+                continue
+            }
+
+            // Lazy continuation: unindented prose on the line right after item text
+            if blankRun == 0 && !currentItem.isEmpty && marker == nil && !startsNewBlock(line) {
                 currentItem.append(line.trimmingCharacters(in: .whitespaces))
                 index += 1
-            } else if line.trimmingCharacters(in: .whitespaces).isEmpty {
-                index += 1
-                if index < lines.count && !isUnorderedListItem(lines[index]) && !lines[index].hasPrefix("  ") {
-                    break
-                }
-            } else {
-                break
+                continue
             }
+
+            break
         }
 
         if !currentItem.isEmpty {
-            items.append(currentItem.joined(separator: "\n"))
+            items.append(currentItem)
         }
 
-        var html = "<ul>\n"
+        var html: String
+        if ordered {
+            let start = first.start ?? 1
+            html = start == 1 ? "<ol>\n" : "<ol start=\"\(start)\">\n"
+        } else {
+            html = "<ul>\n"
+        }
+
         for item in items {
-            let (isTask, isChecked, content) = parseTaskListItem(item)
+            let (isTask, isChecked, itemLines) = parseTaskListItem(item)
+            let inner = unwrapFirstParagraph(convertToHTML(itemLines.joined(separator: "\n")))
+
             if isTask {
                 let checkbox = isChecked
                     ? "<input type=\"checkbox\" checked disabled>"
                     : "<input type=\"checkbox\" disabled>"
-                html += "<li class=\"task-list-item\">\(checkbox) \(parseInline(content))</li>\n"
+                html += "<li class=\"task-list-item\">\(checkbox) \(inner)</li>\n"
             } else {
-                html += "<li>\(parseInline(item))</li>\n"
+                html += "<li>\(inner)</li>\n"
             }
         }
-        html += "</ul>\n"
+
+        html += ordered ? "</ol>\n" : "</ul>\n"
 
         return (html, index)
     }
 
-    private func parseOrderedList(lines: [String], startIndex: Int) -> (String, Int) {
-        var items: [String] = []
-        var index = startIndex
-        var currentItem: [String] = []
-
-        while index < lines.count {
-            let line = lines[index]
-
-            if isOrderedListItem(line) {
-                if !currentItem.isEmpty {
-                    items.append(currentItem.joined(separator: "\n"))
-                }
-                currentItem = [extractOrderedListItemContent(line)]
-                index += 1
-            } else if line.hasPrefix("  ") || line.hasPrefix("\t") {
-                currentItem.append(line.trimmingCharacters(in: .whitespaces))
-                index += 1
-            } else if line.trimmingCharacters(in: .whitespaces).isEmpty {
-                index += 1
-                if index < lines.count && !isOrderedListItem(lines[index]) && !lines[index].hasPrefix("  ") {
-                    break
-                }
-            } else {
-                break
-            }
+    /// A list item's leading `<p>` is stripped so simple items render tight
+    private func unwrapFirstParagraph(_ html: String) -> String {
+        var result = html.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard result.hasPrefix("<p>"), let close = result.range(of: "</p>") else {
+            return result
         }
-
-        if !currentItem.isEmpty {
-            items.append(currentItem.joined(separator: "\n"))
-        }
-
-        var html = "<ol>\n"
-        for item in items {
-            html += "<li>\(parseInline(item))</li>\n"
-        }
-        html += "</ol>\n"
-
-        return (html, index)
+        result.replaceSubrange(close, with: "")
+        result.removeFirst(3)
+        return result.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private func parseTable(lines: [String], startIndex: Int) -> (String, Int) {
@@ -400,8 +416,7 @@ struct MarkdownRenderer {
                line.hasPrefix("#") ||
                line.hasPrefix("```") ||
                line.hasPrefix(">") ||
-               isUnorderedListItem(line) ||
-               isOrderedListItem(line) ||
+               listMarker(line) != nil ||
                isHorizontalRule(line) ||
                (index + 1 < lines.count && isTableDelimiter(lines[index + 1])) {
                 break
@@ -502,42 +517,123 @@ struct MarkdownRenderer {
 
     // MARK: - Helpers
 
-    private func isUnorderedListItem(_ line: String) -> Bool {
-        let trimmed = line.trimmingCharacters(in: .whitespaces)
-        return trimmed.hasPrefix("- ") || trimmed.hasPrefix("* ") || trimmed.hasPrefix("+ ")
+    /// A recognized list bullet or number at the start of a line
+    private struct ListMarker {
+        let ordered: Bool
+        /// Width of the leading whitespace
+        let indent: Int
+        /// Column where the item's content starts — continuation lines are dedented to this
+        let contentIndent: Int
+        /// The number for ordered items, used for the `start` attribute
+        let start: Int?
+        /// Text following the marker
+        let content: String
     }
 
-    private func isOrderedListItem(_ line: String) -> Bool {
-        let trimmed = line.trimmingCharacters(in: .whitespaces)
-        let pattern = "^\\d+\\. "
-        return trimmed.range(of: pattern, options: .regularExpression) != nil
-    }
+    /// Recognizes `-`/`*`/`+` bullets and `1.`/`1)` numbers, at any indentation
+    private func listMarker(_ line: String) -> ListMarker? {
+        let indent = indentWidth(line)
+        let body = dedent(line, by: indent)
+        guard let firstChar = body.first else { return nil }
 
-    private func extractListItemContent(_ line: String) -> String {
-        let trimmed = line.trimmingCharacters(in: .whitespaces)
-        if trimmed.hasPrefix("- ") || trimmed.hasPrefix("* ") || trimmed.hasPrefix("+ ") {
-            return String(trimmed.dropFirst(2))
+        var markerWidth = 0
+        var ordered = false
+        var start: Int?
+
+        if firstChar == "-" || firstChar == "*" || firstChar == "+" {
+            markerWidth = 1
+        } else if firstChar.isNumber {
+            var digits = ""
+            var cursor = body.startIndex
+            while cursor < body.endIndex, body[cursor].isNumber, digits.count < 9 {
+                digits.append(body[cursor])
+                cursor = body.index(after: cursor)
+            }
+            guard cursor < body.endIndex, body[cursor] == "." || body[cursor] == ")" else {
+                return nil
+            }
+            ordered = true
+            start = Int(digits)
+            markerWidth = digits.count + 1
+        } else {
+            return nil
         }
-        return trimmed
+
+        let rest = String(body.dropFirst(markerWidth))
+        // A marker must be followed by whitespace, otherwise "*emphasis*" looks like a bullet
+        guard rest.isEmpty || rest.hasPrefix(" ") || rest.hasPrefix("\t") else { return nil }
+
+        let spacing = min(indentWidth(rest), 4)
+        return ListMarker(
+            ordered: ordered,
+            indent: indent,
+            contentIndent: indent + markerWidth + max(spacing, 1),
+            start: start,
+            content: dedent(rest, by: spacing)
+        )
     }
 
-    private func extractOrderedListItemContent(_ line: String) -> String {
-        let trimmed = line.trimmingCharacters(in: .whitespaces)
-        if let range = trimmed.range(of: "^\\d+\\. ", options: .regularExpression) {
-            return String(trimmed[range.upperBound...])
-        }
-        return trimmed
-    }
+    /// Splits a `[x]` / `[ ]` prefix off a list item's first line
+    private func parseTaskListItem(_ lines: [String]) -> (isTask: Bool, isChecked: Bool, lines: [String]) {
+        guard let first = lines.first else { return (false, false, lines) }
+        let trimmed = first.trimmingCharacters(in: .whitespaces)
 
-    private func parseTaskListItem(_ content: String) -> (isTask: Bool, isChecked: Bool, content: String) {
-        let trimmed = content.trimmingCharacters(in: .whitespaces)
+        let checked: Bool
         if trimmed.hasPrefix("[x] ") || trimmed.hasPrefix("[X] ") {
-            return (true, true, String(trimmed.dropFirst(4)))
+            checked = true
+        } else if trimmed.hasPrefix("[ ] ") {
+            checked = false
+        } else {
+            return (false, false, lines)
         }
-        if trimmed.hasPrefix("[ ] ") {
-            return (true, false, String(trimmed.dropFirst(4)))
+
+        var result = lines
+        result[0] = String(trimmed.dropFirst(4))
+        return (true, checked, result)
+    }
+
+    /// Leading whitespace width, counting a tab as four columns
+    private func indentWidth(_ line: String) -> Int {
+        var width = 0
+        for char in line {
+            if char == " " {
+                width += 1
+            } else if char == "\t" {
+                width += 4
+            } else {
+                break
+            }
         }
-        return (false, false, content)
+        return width
+    }
+
+    /// Removes up to `amount` columns of leading whitespace
+    private func dedent(_ line: String, by amount: Int) -> String {
+        var remaining = amount
+        var cursor = line.startIndex
+
+        while remaining > 0, cursor < line.endIndex {
+            let char = line[cursor]
+            if char == " " {
+                remaining -= 1
+            } else if char == "\t" {
+                remaining -= 4
+            } else {
+                break
+            }
+            cursor = line.index(after: cursor)
+        }
+
+        return String(line[cursor...])
+    }
+
+    /// Whether a line opens a block that a lazy list continuation must not swallow
+    private func startsNewBlock(_ line: String) -> Bool {
+        let trimmed = line.trimmingCharacters(in: .whitespaces)
+        return trimmed.hasPrefix("#")
+            || trimmed.hasPrefix("```")
+            || trimmed.hasPrefix(">")
+            || isHorizontalRule(line)
     }
 
     private func isHorizontalRule(_ line: String) -> Bool {

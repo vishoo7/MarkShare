@@ -68,10 +68,11 @@ xcodebuild -project MarkShare.xcodeproj -scheme MarkShare -destination 'platform
 - `MarkShare/Views/ContentView.swift` - Main container with editor/preview
 - `MarkShare/Views/PreviewWebView.swift` - WKWebView wrapper for rendering
 - `MarkShare/Services/MarkdownRenderer.swift` - Pure Swift Markdown → HTML converter
+- `MarkShare/Services/SyntaxHighlighter.swift` - Pure Swift code block tokenizer (`tok-*` spans)
 - `MarkShare/Services/ExportService.swift` - PDF/PNG/HTML export functionality
 - `MarkShare/Services/ThemeManager.swift` - Theme persistence and CSS loading
 - `MarkShare/Models/Theme.swift` - Theme enum with colors and CSS filenames
-- `MarkShare/Resources/Themes/*.css` - CSS theme files (light, dark, github, sepia)
+- `MarkShare/Resources/Themes/*.css` - CSS theme files (light, dark, github, sepia, solarized, nord, dracula, gruvbox)
 - `MarkShareExtension/ShareViewController.swift` - Share extension for receiving text/markdown
 
 ## Adding New Swift Files
@@ -85,7 +86,10 @@ New `.swift` files must be added to `MarkShare.xcodeproj/project.pbxproj` in 4 p
 - **No network access** - All processing on-device for privacy
 - **No external dependencies** - Pure Swift markdown parsing
 - **JavaScript disabled** in preview WebView (enabled only in export for content measurement)
-- **Share extension** has its own simplified MarkdownRenderer to avoid framework dependencies
+- **Share extension** compiles the same `MarkdownRenderer`, `SyntaxHighlighter`, and
+  `ConversationEntry` sources as the app (added to both targets in `project.pbxproj`, so no
+  framework is needed). Rendering must stay identical across entry points — do not fork the
+  renderer for the extension.
 
 ## iOS Development
 When implementing iOS UI changes, always verify the implementation renders correctly at runtime, not just that it compiles. A successful build does NOT mean the feature works. After UI changes, remind me to test in the simulator or on-device before considering the task complete.
@@ -102,4 +106,9 @@ The app specially handles `<thinking>` and `<think>` tags from AI-generated cont
 - Renders as visually muted blocks with a "Thinking" label
 - Uses placeholder extraction to avoid HTML escaping issues
 - Content inside thinking blocks is rendered as markdown
-- CSS styles in all 4 theme files (.thinking-block class)
+- CSS styles in all 8 theme files (.thinking-block class)
+
+## Theme CSS Contract
+Every theme file must define the `--tok-*` variables and `.tok-*` rules consumed by
+`SyntaxHighlighter` (comment, string, number, keyword, type, function, key). A new theme
+missing them renders code blocks unstyled.

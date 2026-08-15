@@ -23,15 +23,20 @@ AI tools like Claude and ChatGPT give you responses in Markdown. If you want to 
   - Headers (h1-h6)
   - Bold, italic, strikethrough
   - Links and images
-  - Ordered and unordered lists
-  - Task lists (checkboxes)
-  - Code blocks (fenced with language support)
+  - Ordered and unordered lists, nested to any depth (freely mixing the two)
+  - Task lists (checkboxes), including nested ones
+  - Code blocks (fenced, with syntax highlighting)
   - Inline code
   - Blockquotes
   - Tables (GFM style)
   - Horizontal rules
 
-- **7 Beautiful Themes**
+- **Syntax Highlighting** — Pure Swift tokenizer, no JavaScript and no highlighting library:
+  - Swift, JavaScript/TypeScript, Python, JSON, Shell, Go, Rust, Java/Kotlin, C/C++/C#, Ruby, PHP, SQL
+  - Colors come from each theme's own palette
+  - Unrecognized languages render as plain code rather than being guessed at
+
+- **8 Beautiful Themes**
   - Light
   - GitHub
   - Sepia
@@ -39,6 +44,7 @@ AI tools like Claude and ChatGPT give you responses in Markdown. If you want to 
   - Solarized
   - Nord
   - Dracula
+  - Gruvbox
 
 - **Multiple Export Formats**
   - PDF — Full document with pagination
@@ -108,6 +114,7 @@ MarkShare/
 │   └── WelcomeView.swift           # First-launch welcome screen
 ├── Services/
 │   ├── MarkdownRenderer.swift      # Markdown to HTML converter
+│   ├── SyntaxHighlighter.swift     # Code block tokenizer
 │   ├── ExportService.swift         # PDF/PNG/HTML export
 │   └── ThemeManager.swift          # Theme persistence
 ├── Models/
@@ -121,8 +128,12 @@ MarkShare/
         ├── sepia.css
         ├── solarized.css
         ├── nord.css
-        └── dracula.css
+        ├── dracula.css
+        └── gruvbox.css
 ```
+
+The share extension compiles the same `MarkdownRenderer` and `SyntaxHighlighter` as the app,
+so shared content renders identically no matter which entry point it came through.
 
 ## Contributing
 

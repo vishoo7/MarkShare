@@ -193,8 +193,80 @@ final class MarkdownRendererTests: XCTestCase {
 
     func testOrderedListStartingAtDifferentNumber() {
         let html = renderer.convertToHTML("5. Fifth\n6. Sixth")
-        XCTAssertTrue(html.contains("<ol>"))
+        XCTAssertTrue(html.contains("<ol start=\"5\">"))
         XCTAssertTrue(html.contains("<li>Fifth</li>"))
+    }
+
+    func testOrderedListWithParenthesisMarker() {
+        let html = renderer.convertToHTML("1) First\n2) Second")
+        XCTAssertTrue(html.contains("<ol>"))
+        XCTAssertTrue(html.contains("<li>First</li>"))
+        XCTAssertTrue(html.contains("<li>Second</li>"))
+    }
+
+    // MARK: - Nested Lists
+
+    func testNestedUnorderedList() {
+        let html = renderer.convertToHTML("- Top\n  - Nested\n- Second")
+        XCTAssertTrue(html.contains("<li>Top\n<ul>\n<li>Nested</li>\n</ul></li>"))
+        XCTAssertTrue(html.contains("<li>Second</li>"))
+    }
+
+    func testDeeplyNestedList() {
+        let html = renderer.convertToHTML("- A\n  - B\n    - C")
+        // Three levels means three opening tags
+        XCTAssertEqual(html.components(separatedBy: "<ul>").count - 1, 3)
+        XCTAssertTrue(html.contains("<li>C</li>"))
+    }
+
+    func testUnorderedListNestedInsideOrderedList() {
+        let html = renderer.convertToHTML("1. Step\n   - detail\n2. Next")
+        XCTAssertTrue(html.contains("<ol>"))
+        XCTAssertTrue(html.contains("<ul>\n<li>detail</li>\n</ul>"))
+        XCTAssertTrue(html.contains("<li>Next</li>"))
+    }
+
+    func testOrderedListNestedInsideUnorderedList() {
+        let html = renderer.convertToHTML("- Group\n  1. one\n  2. two")
+        XCTAssertTrue(html.contains("<ul>"))
+        XCTAssertTrue(html.contains("<ol>\n<li>one</li>\n<li>two</li>\n</ol>"))
+    }
+
+    func testNestedListWithTwoSpaceIndentUnderOrderedItem() {
+        // AI output often under-indents sublists; they should still nest
+        let html = renderer.convertToHTML("1. Step\n  - detail\n2. Next")
+        XCTAssertTrue(html.contains("<ul>\n<li>detail</li>\n</ul>"))
+    }
+
+    func testNestedTaskList() {
+        let html = renderer.convertToHTML("- [x] Parent\n  - [ ] Child")
+        XCTAssertTrue(html.contains("<input type=\"checkbox\" checked disabled> Parent"))
+        XCTAssertTrue(html.contains("<input type=\"checkbox\" disabled> Child"))
+    }
+
+    func testListItemWithMultipleParagraphs() {
+        let html = renderer.convertToHTML("- First line\n\n  Second paragraph\n- Next")
+        XCTAssertTrue(html.contains("<p>Second paragraph</p>"))
+        XCTAssertTrue(html.contains("<li>Next</li>"))
+    }
+
+    func testListItemWithFencedCodeBlock() {
+        let html = renderer.convertToHTML("- Run this:\n\n  ```\n  swift build\n  ```\n- Done")
+        XCTAssertTrue(html.contains("<pre><code"))
+        XCTAssertTrue(html.contains("swift build"))
+        XCTAssertTrue(html.contains("<li>Done</li>"))
+    }
+
+    func testAsteriskHorizontalRuleIsNotAList() {
+        let html = renderer.convertToHTML("* * *")
+        XCTAssertTrue(html.contains("<hr>"))
+        XCTAssertFalse(html.contains("<ul>"))
+    }
+
+    func testListEndsAtUnindentedParagraphAfterBlankLine() {
+        let html = renderer.convertToHTML("- Item\n\nA new paragraph")
+        XCTAssertTrue(html.contains("</ul>"))
+        XCTAssertTrue(html.contains("<p>A new paragraph</p>"))
     }
 
     // MARK: - Code Blocks
@@ -211,7 +283,8 @@ final class MarkdownRendererTests: XCTestCase {
         let markdown = "```swift\nlet x = 1\n```"
         let html = renderer.convertToHTML(markdown)
         XCTAssertTrue(html.contains("<code class=\"language-swift\">"))
-        XCTAssertTrue(html.contains("let x = 1"))
+        // A recognized language is tokenized, so the code is split across spans
+        XCTAssertTrue(html.contains("<span class=\"tok-kw\">let</span> x = <span class=\"tok-num\">1</span>"))
     }
 
     func testCodeBlockPreservesNewlines() {

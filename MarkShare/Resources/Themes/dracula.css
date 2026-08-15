@@ -11,6 +11,13 @@
     --table-border: #6272a4;
     --table-header-bg: #44475a;
     --hr-color: #6272a4;
+    --tok-comment: #6272a4;
+    --tok-string: #f1fa8c;
+    --tok-number: #bd93f9;
+    --tok-keyword: #ff79c6;
+    --tok-type: #8be9fd;
+    --tok-function: #50fa7b;
+    --tok-key: #ffb86c;
 }
 
 * {
@@ -114,6 +121,15 @@ pre code {
     color: var(--text-color);
     font-size: 0.9em;
 }
+
+/* Syntax highlighting */
+.tok-com { color: var(--tok-comment); font-style: italic; }
+.tok-str { color: var(--tok-string); }
+.tok-num { color: var(--tok-number); }
+.tok-kw { color: var(--tok-keyword); }
+.tok-typ { color: var(--tok-type); }
+.tok-fn { color: var(--tok-function); }
+.tok-key { color: var(--tok-key); }
 
 /* Blockquotes */
 blockquote {

@@ -43,6 +43,11 @@
 		TH2C3D4E5F6A7B8C00000003 /* dracula.css in Resources */ = {isa = PBXBuildFile; fileRef = TH1B2C3D4E5F6A7B00000013 /* dracula.css */; };
 		GR2C3D4E5F6A7B8C00000001 /* gruvbox.css in Resources */ = {isa = PBXBuildFile; fileRef = GR1B2C3D4E5F6A7B00000011 /* gruvbox.css */; };
 		TC1B2C3D4E5F6A7B00000001 /* MarkdownRendererTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TC1B2C3D4E5F6A7B00000011 /* MarkdownRendererTests.swift */; };
+		TC1B2C3D4E5F6A7B00000002 /* SyntaxHighlighterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = TC1B2C3D4E5F6A7B00000012 /* SyntaxHighlighterTests.swift */; };
+		SH1B2C3D4E5F6A7B00000001 /* SyntaxHighlighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = SH1B2C3D4E5F6A7B00000011 /* SyntaxHighlighter.swift */; };
+		SH2C3D4E5F6A7B8C00000001 /* SyntaxHighlighter.swift in Sources */ = {isa = PBXBuildFile; fileRef = SH1B2C3D4E5F6A7B00000011 /* SyntaxHighlighter.swift */; };
+		SH2C3D4E5F6A7B8C00000002 /* MarkdownRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1B2C3D4E5F6A7B00000018 /* MarkdownRenderer.swift */; };
+		SH2C3D4E5F6A7B8C00000003 /* ConversationEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = CV1B2C3D4E5F6A7B00000011 /* ConversationEntry.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +96,7 @@
 		8A1B2C3D4E5F6A7B00000016 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		8A1B2C3D4E5F6A7B00000017 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		8A1B2C3D4E5F6A7B00000018 /* MarkdownRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownRenderer.swift; sourceTree = "<group>"; };
+		SH1B2C3D4E5F6A7B00000011 /* SyntaxHighlighter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntaxHighlighter.swift; sourceTree = "<group>"; };
 		8A1B2C3D4E5F6A7B00000019 /* ExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportService.swift; sourceTree = "<group>"; };
 		8A1B2C3D4E5F6A7B0000001A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8A1B2C3D4E5F6A7B0000001B /* light.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = light.css; sourceTree = "<group>"; };
@@ -108,6 +114,7 @@
 		9B2C3D4E5F6A7B8C00000013 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9B2C3D4E5F6A7B8C00000021 /* MarkShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MarkShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		TC1B2C3D4E5F6A7B00000011 /* MarkdownRendererTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownRendererTests.swift; sourceTree = "<group>"; };
+		TC1B2C3D4E5F6A7B00000012 /* SyntaxHighlighterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntaxHighlighterTests.swift; sourceTree = "<group>"; };
 		TC1B2C3D4E5F6A7B00000021 /* MarkShareTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarkShareTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -189,6 +196,7 @@
 			children = (
 				8A1B2C3D4E5F6A7B00000017 /* ThemeManager.swift */,
 				8A1B2C3D4E5F6A7B00000018 /* MarkdownRenderer.swift */,
+				SH1B2C3D4E5F6A7B00000011 /* SyntaxHighlighter.swift */,
 				8A1B2C3D4E5F6A7B00000019 /* ExportService.swift */,
 			);
 			path = Services;
@@ -250,6 +258,7 @@
 			isa = PBXGroup;
 			children = (
 				TC1B2C3D4E5F6A7B00000011 /* MarkdownRendererTests.swift */,
+				TC1B2C3D4E5F6A7B00000012 /* SyntaxHighlighterTests.swift */,
 			);
 			path = MarkShareTests;
 			sourceTree = "<group>";
@@ -414,6 +423,7 @@
 				8A1B2C3D4E5F6A7B00000006 /* Theme.swift in Sources */,
 				8A1B2C3D4E5F6A7B00000007 /* ThemeManager.swift in Sources */,
 				8A1B2C3D4E5F6A7B00000008 /* MarkdownRenderer.swift in Sources */,
+				SH1B2C3D4E5F6A7B00000001 /* SyntaxHighlighter.swift in Sources */,
 				8A1B2C3D4E5F6A7B00000009 /* ExportService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -423,6 +433,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				9B2C3D4E5F6A7B8C00000001 /* ShareViewController.swift in Sources */,
+				SH2C3D4E5F6A7B8C00000002 /* MarkdownRenderer.swift in Sources */,
+				SH2C3D4E5F6A7B8C00000001 /* SyntaxHighlighter.swift in Sources */,
+				SH2C3D4E5F6A7B8C00000003 /* ConversationEntry.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,6 +444,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				TC1B2C3D4E5F6A7B00000001 /* MarkdownRendererTests.swift in Sources */,
+				TC1B2C3D4E5F6A7B00000002 /* SyntaxHighlighterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
